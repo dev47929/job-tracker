@@ -4,12 +4,10 @@ import Landing from "./components/public/landing";
 import Grainient from "./reactbits/gradient";
 import { userContext } from "./components/private/UserContext";
 function App() {
-  const [token , setToken]= useState();
-  const [userName , setUserName]= useState();
+  const [token , setToken]= useState("");
+  const [userName , setUserName]= useState("");
 
-  const userContext = useContext();
   return (
-    <userContext.Provider value={{userName , setUserName , setToken , token}}>
       <div style={{ width: "100%", position: "relative" }} className="h-full">
         <div
           style={{
@@ -45,7 +43,6 @@ function App() {
         </div>
         <Landing />
       </div>
-    </userContext.Provider>
   );
 }
 

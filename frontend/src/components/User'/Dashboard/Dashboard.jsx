@@ -1,10 +1,14 @@
 import table from "flyonui/components/table";
-import Sidebar from "./Sidebar";
 import { useContext } from "react";
+import Sidebar from "./Sidebar";
 import Table from "./Table";
+
 const Dashboard = () =>{
+    
+
     return (
         <>
+        
         <div className="flex flex-row gap-5 justify-between items-center">
         <div className="flex flex-row gap-5 justify-start items-center">
         <Sidebar></Sidebar>
