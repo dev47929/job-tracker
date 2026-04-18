@@ -17,5 +17,5 @@ public class JobStatusResponseDto {
     private String status;
     private LocalDate appliedOn;
     private String role;
-    
+
 }
