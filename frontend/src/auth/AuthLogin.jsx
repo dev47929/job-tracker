@@ -11,7 +11,7 @@ export default function AuthLogin() {
     const url = "http://localhost:8080/auth/login";
 
     async function tryLogin(){
-       const response = await fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
   "Content-Type": "application/json"
@@ -30,8 +30,8 @@ export default function AuthLogin() {
       const res = await tryLogin();
       const data = await res.json();
       if(res.ok){
-        console.log("Authentication Successfull")
-        console.log(data.jwt); 
+        console.log("Authentication Successfull");
+        localStorage.setItem("token" , data.jwt);
         isLoggedIn(true);
 
       }else{
@@ -55,7 +55,7 @@ export default function AuthLogin() {
         <input
         onChange={(e) => setUsername(e.target.value)}
           value={username}
-          placeholder="Email"
+          placeholder="Username"
           className="w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 
                      text-white focus:outline-none focus:border-indigo-500"
           

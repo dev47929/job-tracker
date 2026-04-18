@@ -1,5 +1,6 @@
 package com.example.jobTracker.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,6 +33,7 @@ public class User implements UserDetails{
 
     @OneToMany( cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id" , nullable = false)
+    @JsonManagedReference
     private List<JobStatus> jobStatuses;
 
     public User(String u, String e, String p, String f , String l) {
