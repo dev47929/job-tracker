@@ -17,10 +17,7 @@ const Dashboard = () =>{
 <p class="text-lg font-normal text-body lg:text-xl mr-3">JobStack</p></div>
 
         <Table></Table>
-        
         </>
-
-        
     )
 }
 
