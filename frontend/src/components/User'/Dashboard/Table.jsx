@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const Table = () => {
   const [userJobs, setUserJobs] = useState([]);
   const [index, setIndex] = useState(1);
   const auth = "Bearer " + localStorage.getItem("token");
   const url = "http://localhost:8080/jobs/users/getjobs";
+  const delurl = "http://localhost:8080/jobs/users/deljob";
 
   async function loadJobs() {
     try {
@@ -24,6 +26,21 @@ const Table = () => {
     }
   }
 
+  async function deleteJob(jobId) {
+    console.log("Delete Triggered")
+    
+    const response = await fetch(delurl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth,
+        },
+        body:{
+
+        }
+      });
+  }
+
   useEffect(() => {
     loadJobs();
   } , []);
@@ -40,6 +57,7 @@ const Table = () => {
               <th>Applied On</th>
               <th>Role</th>
               <th>Comments</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -50,6 +68,8 @@ const Table = () => {
                 <td>{job.status}</td>
                 <td>{job.appliedOn}</td>
                 <td>{job.role}</td>
+                <td>{job.comments}</td>
+                <td onClick={()=>deleteJob(job.jobId)}><AiOutlineDelete></AiOutlineDelete></td>
               </tr>
             ))}
           </tbody>

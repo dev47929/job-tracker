@@ -6,7 +6,7 @@ const Nav = () => {
 
   return (
     <>
-      <div className="navbar bg-base-100/60 shadow-sm">
+      <div className="navbar bg-base-100/60 shadow-sm absolute">
         <div className="flex-1">
 
           <a className="btn btn-ghost text-xl">JobStack</a>

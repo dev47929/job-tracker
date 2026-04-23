@@ -5,13 +5,12 @@ import com.example.jobTracker.Entity.User;
 import com.example.jobTracker.Repository.JobStatusRepo;
 import com.example.jobTracker.Repository.UserRepo;
 import com.example.jobTracker.Security.AuthUtil;
-import com.example.jobTracker.dto.JobList.JobStatusResponseDto;
-import com.example.jobTracker.dto.JobList.PostJobReqDTO;
-import com.example.jobTracker.dto.JobList.PostJobResponseDTO;
+import com.example.jobTracker.dto.JobList.*;
 import com.example.jobTracker.dto.User.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ public class DashboardService {
 
     public List<JobStatusResponseDto> getUsersJobs(HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
-
         return user.getJobStatuses().stream().map(jobStatus -> modelMapper.map(jobStatus , JobStatusResponseDto.class)).toList();
     };
 
@@ -62,5 +60,10 @@ public class DashboardService {
         System.out.println("User" + user);
         return userResponseDTO;
     };
+
+    public @Nullable DelJobResDTO delUserJob(Long jobId) {
+        jobStatusRepo.deleteById(jobId);
+        return new DelJobResDTO(true);
+    }
 
 }

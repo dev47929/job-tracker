@@ -5,7 +5,7 @@ const Mobile = () => {
     <>
       <DomeGallery
         fit={1}
-        minRadius={600}
+        minRadius={1000}
         maxVerticalRotationDeg={0}
         segments={60}
         dragDampening={2}
