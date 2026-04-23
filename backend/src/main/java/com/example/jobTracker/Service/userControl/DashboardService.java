@@ -8,7 +8,6 @@ import com.example.jobTracker.Security.AuthUtil;
 import com.example.jobTracker.dto.JobList.*;
 import com.example.jobTracker.dto.User.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
@@ -61,7 +60,7 @@ public class DashboardService {
         return userResponseDTO;
     };
 
-    public @Nullable DelJobResDTO delUserJob(Long jobId) {
+    public @Nullable DelJobResDTO delUserJob(Long jobId, HttpServletRequest httpServletRequest) {
         jobStatusRepo.deleteById(jobId);
         return new DelJobResDTO(true);
     }

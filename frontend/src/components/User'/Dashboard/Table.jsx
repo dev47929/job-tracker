@@ -7,7 +7,7 @@ const Table = () => {
   const [index, setIndex] = useState(1);
   const auth = "Bearer " + localStorage.getItem("token");
   const url = "http://localhost:8080/jobs/users/getjobs";
-  const delurl = "http://localhost:8080/jobs/users/deljob";
+  const delurl = "http://localhost:8080/jobs/users/";
 
   async function loadJobs() {
     try {
@@ -29,8 +29,8 @@ const Table = () => {
   async function deleteJob(jobId) {
     console.log("Delete Triggered")
     
-    const response = await fetch(delurl, {
-        method: "POST",
+    const response = await fetch(delurl+jobId, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: auth,
@@ -43,7 +43,7 @@ const Table = () => {
 
   useEffect(() => {
     loadJobs();
-  } , []);
+  } , userJobs );
 
   return (
     <>

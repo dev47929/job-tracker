@@ -35,8 +35,8 @@ public class UserDashboardController {
         return ResponseEntity.ok(dashboardService.addJob(postJobReqDTO , httpServletRequest));
     }
 
-    @DeleteMapping("/users/deljob/{jobId}")
-    public ResponseEntity<DelJobResDTO> delJob(@RequestParam Long jobId, HttpServletRequest httpServletRequest){
+    @DeleteMapping("/users/{jobId}")
+    public ResponseEntity<DelJobResDTO> delJob(@PathVariable Long jobId, HttpServletRequest httpServletRequest){
         return ResponseEntity.ok(dashboardService.delUserJob(jobId , httpServletRequest));
     }
 }
