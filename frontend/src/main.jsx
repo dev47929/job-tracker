@@ -11,6 +11,7 @@ import AuthLogin from "./auth/AuthLogin.jsx";
 import AuthSignup from "./auth/AuthSignup.jsx";
 import Auth from "./auth/Auth.jsx";
 import Dashboard from "./components/User'/Dashboard/Dashboard.jsx";
+import Profile from "./components/User'/MyProfile/Profile.jsx";
 const Routes = createBrowserRouter([
   {
     path: "/",
@@ -28,10 +29,12 @@ const Routes = createBrowserRouter([
   {
     path: "/user/dashboard",
     element: <Dashboard/> ,
-    children: [
-      { path: "login", element: <AuthLogin /> },
-      { path: "signup", element: <AuthSignup /> },
-    ],
+    
+  },
+  {
+    path: "/user/myprofile",
+    element: <Profile/> ,
+    
   },
 ]);
 createRoot(document.getElementById("root")).render(
