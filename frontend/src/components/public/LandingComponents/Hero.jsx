@@ -18,10 +18,10 @@ const Hero = () => {
   </p>
   <div className="flex justify-center flex-row items-center gap-3">
 
-    <Link class="btn btn-soft btn-primary " to={"/auth/login"}>
+    <Link className="btn btn-soft btn-primary " to={"/auth/login"}>
     Login
     </Link>
-<Link class="btn btn-soft btn-secondary " to={"/auth/signup"}>
+<Link className="btn btn-soft btn-secondary " to={"/auth/signup"}>
     Signup
     </Link>
   </div>

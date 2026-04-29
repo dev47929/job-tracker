@@ -130,7 +130,7 @@ return (
   )}else{
     return(<>
       <div className="p-4 text-center text-sm text-fg-success-strong flex flex-col justify-center  rounded-base bg-success-soft" role="alert">
-  <span class="font-medium">You have successfully created an account! </span> Proceed to Login
+  <span className="font-medium">You have successfully created an account! </span> Proceed to Login
 
 <Link
           to="/login"
