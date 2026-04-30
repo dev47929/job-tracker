@@ -1,5 +1,5 @@
 package com.example.jobTracker.Service.userControl;
-import com.api
+
 import com.example.jobTracker.Entity.JobStatus;
 import com.example.jobTracker.Entity.User;
 import com.example.jobTracker.Repository.JobStatusRepo;
@@ -71,9 +71,8 @@ public class DashboardService {
     }
 
 
-    public AiResDTO askAiAndUpdate(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
-        User user = getUser(httpServletRequest);
-
+    public @Nullable AiResDTO askAiAndUpdate(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
+        return null;
 
     }
 }

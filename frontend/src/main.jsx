@@ -11,7 +11,8 @@ import AuthLogin from "./auth/AuthLogin.jsx";
 import AuthSignup from "./auth/AuthSignup.jsx";
 import Auth from "./auth/Auth.jsx";
 import Dashboard from "./components/User'/Dashboard/Dashboard.jsx";
-import Profile from "./components/User'/MyProfile/Profile.jsx";
+import Profile from "./components/User'/Dashboard/Profile.jsx";
+import Applications from "./components/User'/Dashboard/Applications.jsx";
 const Routes = createBrowserRouter([
   {
     path: "/",
@@ -27,15 +28,14 @@ const Routes = createBrowserRouter([
     ],
   },
   {
-    path: "/user/dashboard",
+    path: "/user/dashboard/",
     element: <Dashboard/> ,
-    
+    children: [
+      { path: "profile", element: <Profile /> },
+      { path: "applications", element: <Applications/> },
+    ],
   },
-  {
-    path: "/user/myprofile",
-    element: <Profile/> ,
-    
-  },
+
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
