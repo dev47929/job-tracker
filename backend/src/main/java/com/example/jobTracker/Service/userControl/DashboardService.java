@@ -1,19 +1,22 @@
 package com.example.jobTracker.Service.userControl;
-
+import com.api
 import com.example.jobTracker.Entity.JobStatus;
 import com.example.jobTracker.Entity.User;
 import com.example.jobTracker.Repository.JobStatusRepo;
 import com.example.jobTracker.Repository.UserRepo;
 import com.example.jobTracker.Security.AuthUtil;
+import com.example.jobTracker.dto.AiReqDto;
+import com.example.jobTracker.dto.AiResDTO;
 import com.example.jobTracker.dto.JobList.*;
 import com.example.jobTracker.dto.User.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.core.env.*;
 import java.util.List;
 
 @Service
@@ -23,6 +26,9 @@ public class DashboardService {
     private final JobStatusRepo jobStatusRepo;
     private final AuthUtil authUtil;
     private final ModelMapper modelMapper;
+    @Value("${API_KEY}")
+    private String api_key;
+
 
     public List<JobStatusResponseDto> getUsersJobs(HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
@@ -48,7 +54,6 @@ public class DashboardService {
         if(!userRepo.existsByUsername(username)){
             throw new UsernameNotFoundException("Username not found" +username);
         };
-
         User user = userRepo.findByUsername(username).orElseThrow();
         return user;
     }
@@ -60,9 +65,15 @@ public class DashboardService {
         return userResponseDTO;
     };
 
-    public @Nullable DelJobResDTO delUserJob(Long jobId, HttpServletRequest httpServletRequest) {
+    public DelJobResDTO delUserJob(Long jobId, HttpServletRequest httpServletRequest) {
         jobStatusRepo.deleteById(jobId);
         return new DelJobResDTO(true);
     }
 
+
+    public AiResDTO askAiAndUpdate(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
+        User user = getUser(httpServletRequest);
+
+
+    }
 }

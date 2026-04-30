@@ -2,6 +2,8 @@ package com.example.jobTracker.Controller;
 
 
 import com.example.jobTracker.Service.userControl.DashboardService;
+import com.example.jobTracker.dto.AiReqDto;
+import com.example.jobTracker.dto.AiResDTO;
 import com.example.jobTracker.dto.JobList.*;
 import com.example.jobTracker.dto.User.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,5 +40,10 @@ public class UserDashboardController {
     @DeleteMapping("/users/{jobId}")
     public ResponseEntity<DelJobResDTO> delJob(@PathVariable Long jobId, HttpServletRequest httpServletRequest){
         return ResponseEntity.ok(dashboardService.delUserJob(jobId , httpServletRequest));
+    }
+
+    @PostMapping("/users/ai/organizeandadd")
+    public ResponseEntity<AiResDTO> addUsingAi(AiReqDto aiReqDto , HttpServletRequest httpServletRequest){
+        return ResponseEntity.ok(dashboardService.askAiAndUpdate(aiReqDto,httpServletRequest));
     }
 }
