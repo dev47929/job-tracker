@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import Error from "./Error";
 
 export default function AuthLogin() {
     
@@ -8,20 +8,11 @@ export default function AuthLogin() {
     const [username , setUsername] = useState("");
     const [password , setPassword] = useState("");
     const [login , isLoggedIn] = useState(false);
+    const [err , setErr] = useState("");
     const url = "http://localhost:8080/auth/login";
 
     async function tryLogin(){
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-  "Content-Type": "application/json"
-},
-       body: JSON.stringify({
-      username : username,
-      password : password
-    })
-,
-    });
+    ;
     return response;
     }
 
@@ -30,12 +21,12 @@ export default function AuthLogin() {
       const res = await tryLogin();
       const data = await res.json();
       if(res.ok){
-        console.log("Authentication Successfull");
+
         localStorage.setItem("token" , data.jwt);
         isLoggedIn(true);
 
       }else{
-        console.log("Authentication failed");
+        setErr(res);
       }
       setPassword("");
       setUsername("");
@@ -85,6 +76,8 @@ export default function AuthLogin() {
         Create account
         </Link>
       </div>
+
+      <Error props ={err , setErr}></Error>
     </>
   )}else{
       return (<>
