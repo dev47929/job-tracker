@@ -1,2 +1,3 @@
 *.env
 *.properties
+backend/src/test/java/com/example/jobTracker/JobTrackerApplicationTests.java

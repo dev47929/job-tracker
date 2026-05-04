@@ -30,7 +30,7 @@ class AIapiServiceTest {
         ReflectionTestUtils.setField(
                 aIapiService,
                 "apiKeyOrBearer",
-                "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"
+                "API_KEY"
 
         );
 
