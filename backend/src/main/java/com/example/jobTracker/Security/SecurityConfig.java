@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -45,10 +47,23 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
+    //MODEL MAPPER AND REST TEMPLATE BEANS :
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
+
+    @Bean
+    public HttpHeaders httpHeaders(){
+        return new org.springframework.http.HttpHeaders();
+    }
+    //SECURITY CONFIG CONTINUED
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
