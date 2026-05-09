@@ -3,15 +3,13 @@ package com.example.jobTracker.Service;
 import com.example.jobTracker.dto.AIdtos.ContextReqDTO;
 import com.example.jobTracker.dto.AIdtos.ContextResDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -24,9 +22,7 @@ public class AIapiService {
 
     private final String url = "https://openrouter.ai/api/v1/chat/completions";
 
-
     public ContextResDTO getAiResponse(String context){
-        ContextReqDTO contextReqDTO = new ContextReqDTO(context);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         //Authorization send karna is simple , directly use set
@@ -47,30 +43,27 @@ public class AIapiService {
                         "  \"appliedOn\": \"\",\n" +
                         "  \"role\": \"\"\n" +
                         "}\n" +
-                        "Set fields as N/A if not found."
+                        "Set fields as N/A if not found and remove garbage data (if any)."
         );
 
-
-        // Request body
         HashMap<String, Object> body = new HashMap<>();
-        body.put("model", "tencent/hy3-preview:free");
-        body.put("messages", mp);
+        body.put("model", "inclusionai/ring-2.6-1t:free");
+        body.put("messages", List.of(mp));
+        body.put("include_reasoning", false);
 
-        // Full request entity
         HttpEntity<HashMap<String, Object>> entity =
                 new HttpEntity<>(body, httpHeaders);
-
-        ResponseEntity<String> response = restTemplate.exchange(
+        System.out.println(url + apiKeyOrBearer);
+        ResponseEntity<ContextResDTO> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
-                String.class
+                ContextResDTO.class
         );
-        System.out.println("Function Executed");
         System.out.println("Status Code: " + response.getStatusCode());
 
         System.out.println("RAW RESPONSE:");
-        System.out.println(response.getBody());
+        System.out.println(response.getBody().getChoices().get(0).getMessage().getContent());
 
         return null;
     };
