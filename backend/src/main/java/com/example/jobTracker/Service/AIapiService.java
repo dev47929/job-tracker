@@ -43,7 +43,7 @@ public class AIapiService {
                         "  \"appliedOn\": \"\",\n" +
                         "  \"role\": \"\"\n" +
                         "}\n" +
-                        "Set fields as N/A if not found and remove garbage data (if any)."
+                        "Set fields as N/A if not found and remove garbage data (if any).THE RESPONSE U GIVE SHOULD STRICTLY BE A JSON ARRAY"
         );
 
         HashMap<String, Object> body = new HashMap<>();
@@ -63,8 +63,9 @@ public class AIapiService {
         System.out.println("Status Code: " + response.getStatusCode());
 
         System.out.println("RAW RESPONSE:");
-        System.out.println(response.getBody().getChoices().get(0).getMessage().getContent());
-
+        StringBuilder stringBuilder = new StringBuilder(response.getBody().getChoices().get(0).getMessage().getContent());
+        String res = stringBuilder.substring(7, stringBuilder.length()-3).toString();
+          
         return null;
     };
 
