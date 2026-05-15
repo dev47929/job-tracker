@@ -43,7 +43,7 @@ public class UserDashboardController {
     }
 
     @PostMapping("/users/ai/organizeandadd")
-    public ResponseEntity<AiResDTO> addUsingAi(AiReqDto aiReqDto , HttpServletRequest httpServletRequest){
+    public ResponseEntity<List<JobStatusResponseDto>> addUsingAi(AiReqDto aiReqDto , HttpServletRequest httpServletRequest){
         return ResponseEntity.ok(dashboardService.askAiAndUpdate(aiReqDto,httpServletRequest));
     }
 }

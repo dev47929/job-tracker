@@ -5,6 +5,7 @@ import com.example.jobTracker.Entity.User;
 import com.example.jobTracker.Repository.JobStatusRepo;
 import com.example.jobTracker.Repository.UserRepo;
 import com.example.jobTracker.Security.AuthUtil;
+import com.example.jobTracker.Service.AIapiService;
 import com.example.jobTracker.dto.AiReqDto;
 import com.example.jobTracker.dto.AiResDTO;
 import com.example.jobTracker.dto.JobList.*;
@@ -25,6 +26,7 @@ public class DashboardService {
     private final UserRepo userRepo;
     private final JobStatusRepo jobStatusRepo;
     private final AuthUtil authUtil;
+    private final AIapiService aIapiService;
     private final ModelMapper modelMapper;
     @Value("${API_KEY}")
     private String api_key;
@@ -71,8 +73,9 @@ public class DashboardService {
     }
 
 
-    public @Nullable AiResDTO askAiAndUpdate(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
-        return null;
-
+    public List<JobStatusResponseDto> askAiAndUpdate(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
+        List<JobStatus> jobStatusesList = aIapiService.getAiResponse(aiReqDto.getPrompt());
+        List<JobStatusResponseDto> jobStatusResponseDtos = jobStatusesList.stream().map(jobStatus -> modelMapper.map(jobStatus , JobStatusResponseDto.class)).toList();
+        return jobStatusResponseDtos;
     }
 }

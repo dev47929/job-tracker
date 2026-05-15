@@ -1,4 +1,5 @@
 package com.example.jobTracker.Entity;
+import com.example.jobTracker.Repository.JobStatusRepo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
