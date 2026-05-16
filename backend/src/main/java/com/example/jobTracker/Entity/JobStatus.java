@@ -17,7 +17,7 @@ public class JobStatus {
 
     private String company;
     private String status;
-    private LocalDate appliedOn;
+    private String appliedOn;
     private String role;
 
     @ManyToOne

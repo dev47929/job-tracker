@@ -1,18 +1,16 @@
 package com.example.jobTracker.Service;
 
 import com.example.jobTracker.Entity.JobStatus;
-import com.example.jobTracker.dto.AIdtos.ContextReqDTO;
 import com.example.jobTracker.dto.AIdtos.ContextResDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.lang.runtime.ObjectMethods;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,12 +51,11 @@ public class AIapiService {
                         "]\n" +
                         "Rules:\n" +
                         "- Return ONLY JSON\n" +
-                        "- No markdown\n" +
                         "- No explanation\n" +
                         "- Use N/A if field missing"
         );
         HashMap<String, Object> body = new HashMap<>();
-        body.put("model", "inclusionai/ring-2.6-1t:free");
+        body.put("model", "deepseek/deepseek-v4-flash:free");
         body.put("messages", List.of(mp));
         body.put("include_reasoning", false);
 
@@ -72,9 +69,13 @@ public class AIapiService {
                 ContextResDTO.class
         );
         System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println(response.getBody());
         System.out.println("RAW RESPONSE:");
-        String res = response.getBody()
-                .getChoices()
+        ContextResDTO responseBody = response.getBody();
+        if (responseBody == null || responseBody.getChoices() == null || responseBody.getChoices().isEmpty()) {
+            throw new RuntimeException("AI API returned empty response");
+        }
+        String res = responseBody.getChoices()
                 .get(0)
                 .getMessage()
                 .getContent();
@@ -83,7 +84,7 @@ public class AIapiService {
                 .replace("```", "")
                 .trim();
 
-
+        System.out.println(res);
         List<JobStatus> jobStatuses = null;
         try {
             jobStatuses = objectMapper.readValue(res, new TypeReference<List<JobStatus>>() {
@@ -91,7 +92,6 @@ public class AIapiService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
         return jobStatuses;
     };
 
