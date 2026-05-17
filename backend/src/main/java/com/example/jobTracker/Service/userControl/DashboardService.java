@@ -74,7 +74,13 @@ public class DashboardService {
 
 
     public List<JobStatusResponseDto> askAiAndUpdate(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
-        List<JobStatus> jobStatusesList = aIapiService.getAiResponse(aiReqDto.getPrompt());
+        List<JobStatus> jobStatusesList = aIapiService.getOpenRouterResponse(aiReqDto.getPrompt());
+        List<JobStatusResponseDto> jobStatusResponseDtos = jobStatusesList.stream().map(jobStatus -> modelMapper.map(jobStatus , JobStatusResponseDto.class)).toList();
+        return jobStatusResponseDtos;
+    }
+
+    public List<JobStatusResponseDto> askAiAndUpdateUsingGroq(AiReqDto aiReqDto, HttpServletRequest httpServletRequest) {
+        List<JobStatus> jobStatusesList = aIapiService.getGroqApiResponse(aiReqDto.getPrompt());
         List<JobStatusResponseDto> jobStatusResponseDtos = jobStatusesList.stream().map(jobStatus -> modelMapper.map(jobStatus , JobStatusResponseDto.class)).toList();
         return jobStatusResponseDtos;
     }

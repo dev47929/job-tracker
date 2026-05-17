@@ -23,6 +23,8 @@ public class AIapiServiceTest {
     @Mock
     private RestTemplate restTemplate;
 
+
+
     private String testContext = "ID,Company,Role,Location,Status,Applied Date,Salary,Type\n" +
             "1,Google,Software Engineer Intern,Bangalore India,Applied,1 May 2026,₹12 LPA,Internship\n" +
             "2,Microsoft,Frontend Developer Intern,Hyderabad India,Interview Scheduled,28 Apr 2026,₹10 LPA,Internship\n" +
@@ -36,6 +38,6 @@ public class AIapiServiceTest {
 
     @Test
     public void AiTest(){
-        aIapiService.getAiResponse(testContext);
+        aIapiService.getGroqApiResponse(testContext);
     };
 }

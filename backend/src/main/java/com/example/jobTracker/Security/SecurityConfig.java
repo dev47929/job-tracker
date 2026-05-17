@@ -6,6 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -15,10 +17,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,16 +63,26 @@ public class SecurityConfig {
     public ObjectMapper objectMapper(){
         return new ObjectMapper();
     }
-
     @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
+    public RestTemplate restTemplate() {
+
+        SimpleClientHttpRequestFactory   factory =
+                new SimpleClientHttpRequestFactory();
+
+        factory.setConnectTimeout(10000);
+        factory.setReadTimeout(10000);
+
+        return new RestTemplate(factory);
     }
+    @Bean
+    public WebClient.Builder webClientBuilder(){return WebClient.builder(); }
 
     @Bean
     public HttpHeaders httpHeaders(){
         return new org.springframework.http.HttpHeaders();
     }
+
+
     //SECURITY CONFIG CONTINUED
 
     @Bean

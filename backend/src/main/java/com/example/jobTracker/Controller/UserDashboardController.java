@@ -46,4 +46,8 @@ public class UserDashboardController {
     public ResponseEntity<List<JobStatusResponseDto>> addUsingAi(@RequestBody AiReqDto aiReqDto , HttpServletRequest httpServletRequest){
         return ResponseEntity.ok(dashboardService.askAiAndUpdate(aiReqDto,httpServletRequest));
     }
+    @PostMapping("/users/ai/addGroq")
+    public ResponseEntity<List<JobStatusResponseDto>> addUsingGroq(@RequestBody AiReqDto aiReqDto , HttpServletRequest httpServletRequest){
+        return ResponseEntity.ok(dashboardService.askAiAndUpdateUsingGroq(aiReqDto,httpServletRequest));
+    }
 }
