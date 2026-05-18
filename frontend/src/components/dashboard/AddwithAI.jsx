@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FiX, FiLoader } from "react-icons/fi";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:8080";
+
 const AddwithAI = () => {
   const [showModal, setShowModal] = useState(false);
   const [rawData, setRawData] = useState("");
@@ -18,7 +20,7 @@ const AddwithAI = () => {
     setLoading(true);
     try {
       // Send to backend AI to parse and structure
-      const response = await fetch("http://localhost:8080/jobs/parse-ai", {
+      const response = await fetch(`${BASE_URL}/jobs/parse-ai`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +56,7 @@ const AddwithAI = () => {
   const handleSubmitBulk = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/jobs/bulk-add", {
+      const response = await fetch(`${BASE_URL}/jobs/bulk-add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +96,7 @@ const AddwithAI = () => {
       {!showModal && (
         <button
           onClick={() => setShowModal(true)}
-          className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold transition"
+          className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold transition cursor-pointer"
         >
           + Add with AI
         </button>
@@ -102,8 +104,8 @@ const AddwithAI = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-slate-800 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-800 rounded-2xl p-6 md:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl">
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-white">
@@ -115,7 +117,7 @@ const AddwithAI = () => {
                   setShowModal(false);
                   handleReset();
                 }}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white transition cursor-pointer"
               >
                 <FiX size={24} />
               </button>
@@ -131,16 +133,14 @@ const AddwithAI = () => {
                 <textarea
                   value={rawData}
                   onChange={(e) => setRawData(e.target.value)}
-                  placeholder="Example:
-Google - SDE Role - Applied on 2026-04-30 - Status: Pending - Great company!
-Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very interested"
-                  className="w-full h-48 px-4 py-3 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:border-indigo-500 resize-none"
+                  placeholder={`Example:\nGoogle - SDE Role - Applied on 2026-04-30 - Status: Pending - Great company!\nMicrosoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very interested`}
+                  className="w-full h-48 px-4 py-3 bg-slate-900 text-white rounded-lg border border-slate-700 focus:outline-none focus:border-indigo-500 resize-none font-mono text-sm"
                 />
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={handleAIProcess}
                     disabled={loading}
-                    className="flex-1 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white rounded-lg font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {loading && <FiLoader className="animate-spin" />}
                     {loading ? "Processing..." : "Process with AI"}
@@ -150,7 +150,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                       setShowModal(false);
                       handleReset();
                     }}
-                    className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition"
+                    className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -168,9 +168,9 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                   {parsedJobs.map((job, index) => (
                     <div
                       key={index}
-                      className="bg-slate-700 p-4 rounded-lg border border-slate-600"
+                      className="bg-slate-900 p-4 rounded-lg border border-slate-700"
                     >
-                      <div className="grid grid-cols-2 gap-4 mb-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                         <div>
                           <label className="text-sm text-gray-400">
                             Company
@@ -181,7 +181,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                             onChange={(e) =>
                               handleEditJob(index, "company", e.target.value)
                             }
-                            className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:border-indigo-500"
+                            className="w-full px-3 py-2 bg-slate-800 text-white rounded border border-slate-750 focus:outline-none focus:border-indigo-500"
                           />
                         </div>
                         <div>
@@ -192,7 +192,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                             onChange={(e) =>
                               handleEditJob(index, "role", e.target.value)
                             }
-                            className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:border-indigo-500"
+                            className="w-full px-3 py-2 bg-slate-800 text-white rounded border border-slate-750 focus:outline-none focus:border-indigo-500"
                           />
                         </div>
                         <div>
@@ -205,7 +205,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                             onChange={(e) =>
                               handleEditJob(index, "appliedOn", e.target.value)
                             }
-                            className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:border-indigo-500"
+                            className="w-full px-3 py-2 bg-slate-800 text-white rounded border border-slate-750 focus:outline-none focus:border-indigo-500"
                           />
                         </div>
                         <div>
@@ -217,7 +217,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                             onChange={(e) =>
                               handleEditJob(index, "status", e.target.value)
                             }
-                            className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:border-indigo-500"
+                            className="w-full px-3 py-2 bg-slate-800 text-white rounded border border-slate-750 focus:outline-none focus:border-indigo-500"
                           >
                             <option>Applied</option>
                             <option>Interview</option>
@@ -236,13 +236,13 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                           onChange={(e) =>
                             handleEditJob(index, "comments", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+                          className="w-full px-3 py-2 bg-slate-800 text-white rounded border border-slate-750 focus:outline-none focus:border-indigo-500 resize-none"
                           rows="2"
                         />
                       </div>
                       <button
                         onClick={() => handleRemoveJob(index)}
-                        className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm transition"
+                        className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm transition cursor-pointer"
                       >
                         Remove
                       </button>
@@ -251,7 +251,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                 </div>
 
                 {parsedJobs.length === 0 && (
-                  <p className="text-gray-400 text-center py-8">
+                  <p className="text-gray-450 text-center py-8">
                     No jobs parsed. Please try again.
                   </p>
                 )}
@@ -260,14 +260,14 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                   <button
                     onClick={handleSubmitBulk}
                     disabled={loading || parsedJobs.length === 0}
-                    className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {loading && <FiLoader className="animate-spin" />}
                     {loading ? "Submitting..." : "Submit All"}
                   </button>
                   <button
                     onClick={() => handleReset()}
-                    className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition"
+                    className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition cursor-pointer"
                   >
                     Back
                   </button>
@@ -276,7 +276,7 @@ Microsoft - Product Manager - Applied on 2026-04-29 - Status: Interview - Very i
                       setShowModal(false);
                       handleReset();
                     }}
-                    className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg font-semibold transition"
+                    className="flex-1 px-4 py-2 bg-gray-750 hover:bg-gray-800 text-white rounded-lg font-semibold transition cursor-pointer"
                   >
                     Close
                   </button>

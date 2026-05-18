@@ -5,11 +5,11 @@ const Error = (props) => {
   return (
     <>
       <div
-        className="bg-red-900 rounded-2xl flex items-start sm:items-center p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft"
+        className="bg-red-900 rounded-2xl flex items-start sm:items-center p-4 mb-4 text-sm text-fg-danger-strong bg-danger-soft"
         role="alert"
       >
         <svg
-          className="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0"
+          className="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0 text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -25,7 +25,7 @@ const Error = (props) => {
             d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
           />
         </svg>
-        <p>
+        <p className="text-white">
           <span className="font-medium me-1">Error:</span> {props.err}
         </p>
       </div>

@@ -98,7 +98,7 @@ void main(){
 }
 `;
 
-const Grainient = ({
+const Gradient = ({
   timeSpeed = 0.25,
   colorBalance = 0.0,
   warpStrength = 1.0,
@@ -237,4 +237,4 @@ const Grainient = ({
   return <div ref={containerRef} className={`relative h-full w-full overflow-hidden ${className}`.trim()} />;
 };
 
-export default Grainient;
+export default Gradient;

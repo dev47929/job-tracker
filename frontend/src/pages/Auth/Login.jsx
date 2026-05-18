@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Error from "./Error";
+import Error from "../../components/ui/Error";
 
-export default function AuthLogin() {
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:8080";
+
+export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, isLoggedIn] = useState(false);
   const [err, setErr] = useState("");
-  const url = "http://localhost:8080/auth/login";
+  const url = `${BASE_URL}/auth/login`;
 
   async function tryLogin() {
     const response = await fetch(url, {
@@ -53,61 +55,64 @@ export default function AuthLogin() {
           Log in to Job<span className="text-indigo-400">Stack</span>
         </p>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <input
             onChange={(e) => setUsername(e.target.value)}
             value={username}
+            type="text"
             placeholder="Username"
             className="w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 
-                     text-white focus:outline-none focus:border-indigo-500"
+                     text-white focus:outline-none focus:border-indigo-500 transition"
           />
 
           <input
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            type="password"
             placeholder="Password"
             className="w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 
-                     text-white focus:outline-none focus:border-indigo-500"
+                     text-white focus:outline-none focus:border-indigo-500 transition"
           />
 
           <button
-            onClick={handleSubmit}
             type="submit"
             className="w-full py-3 rounded-lg bg-indigo-500 hover:bg-indigo-600 
-                     transition font-semibold text-white"
+                     transition font-semibold text-white cursor-pointer shadow-lg shadow-indigo-500/25"
           >
             Login
           </button>
         </form>
 
-        <div className="flex justify-left text-sm text-slate-400 mt-6">
-          <p className="pr-1">New User?</p>
+        <div className="flex justify-left text-sm text-slate-450 mt-6 gap-1">
+          <p>New User?</p>
           <Link
             to="/auth/signup"
-            className="hover:text-indigo-400 hover:underline transition"
+            className="text-indigo-400 hover:text-indigo-300 hover:underline transition font-medium"
           >
             Create account
           </Link>
         </div>
 
-        <Error err={err} setErr={setErr} />
+        <div className="mt-4">
+          <Error err={err} />
+        </div>
       </>
     );
   } else {
     return (
       <>
         <div
-          className="p-4 text-center text-sm text-fg-success-strong flex flex-col justify-center  rounded-base bg-success-soft"
+          className="p-4 text-center text-sm text-green-400 flex flex-col justify-center rounded-xl bg-green-500/10 border border-green-500/20"
           role="alert"
         >
-          <span className="font-medium">
-            You have successfully Logged In! Proceed to Dashboard{" "}
+          <span className="font-medium mb-4">
+            You have successfully Logged In!
           </span>
 
           <Link
-            to="/user/dashboard"
+            to="/user/dashboard/applications"
             className="w-full py-3 rounded-lg bg-indigo-500 hover:bg-indigo-600 
-                     transition font-semibold text-white m-3 p-3 text-center "
+                     transition font-semibold text-white text-center shadow-lg shadow-indigo-500/25"
           >
             Proceed To Dashboard
           </Link>

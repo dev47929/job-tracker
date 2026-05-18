@@ -1,6 +1,6 @@
-import DomeGallery from "../../../reactbits/LandingGlobe";
+import DomeGallery from "./LandingGlobe";
 
-const Mobile = () => {
+const Iphone = () => {
   return (
     <>
       <DomeGallery
@@ -9,11 +9,11 @@ const Mobile = () => {
         maxVerticalRotationDeg={0}
         segments={60}
         dragDampening={2}
-        grayscale = {false}
+        grayscale={false}
         overlayBlurColor="transparent"
       />
     </>
   );
 };
 
-export default Mobile;
+export default Iphone;

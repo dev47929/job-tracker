@@ -11,13 +11,12 @@ const Sidebar = () => {
 
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
-
           <li>
             <Link
               to={"/user/dashboard/applications"}
               className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-slate-700 transition"
             >
-              <FiSettings size={20} />
+              <FiBriefcase size={20} />
               <span>Applications</span>
             </Link>
           </li>
@@ -26,7 +25,7 @@ const Sidebar = () => {
               to={"/user/dashboard/profile"}
               className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-slate-700 transition"
             >
-              <FiSettings size={20} />
+              <FiUser size={20} />
               <span>Profile</span>
             </Link>
           </li>
