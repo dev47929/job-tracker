@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class AIapiService {
 
-    @Value("${API_KEY}")
+    @Value("${openrouter.api.key}")
     private String apiKeyOrBearer;
 
     @Value("${groq.api.key}")
@@ -30,7 +30,7 @@ public class AIapiService {
     private final WebClient.Builder webClientBuilder;
     private final String url = "https://openrouter.ai/api/v1/chat/completions";
     private final String base_url ="https://api.groq.com/openai/v1";
-    private final String groqUrl = "";
+    private final String groqUrl = "https://api.groq.com/openai/v1";
     private final String systemPrompt =  "\nConvert the above data into STRICT VALID JSON ARRAY format.\n" +
             "Example:\n" +
             "[\n" +
@@ -55,8 +55,8 @@ public class AIapiService {
         // If the API_KEY starts with "sk-proj-", it is an OpenAI API Key.
         // If they called getOpenRouterResponse, but are using an OpenAI key, we should route it to OpenAI API instead.
         if (apiKeyOrBearer != null && (apiKeyOrBearer.startsWith("sk-proj-") || (apiKeyOrBearer.startsWith("sk-") && !apiKeyOrBearer.startsWith("sk-or-")))) {
-            actualUrl = "https://api.openai.com/v1/chat/completions";
-            model = "gpt-4o-mini";
+            actualUrl = "https://openrouter.ai/api/v1/chat/completions";
+            model = "openrouter/free";
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -156,35 +156,26 @@ public class AIapiService {
                         entity,
                         ContextResDTO.class
                 );
-
         ContextResDTO responseBody = response.getBody();
-
         if (responseBody == null
                 || responseBody.getChoices() == null
                 || responseBody.getChoices().isEmpty()) {
-
             return List.of();
         }
-
         try {
-
             String res = responseBody.getChoices()
                     .get(0)
                     .getMessage()
                     .getContent();
-
             res = res.replace("```json", "")
                     .replace("```", "")
                     .trim();
-
             // Configure ObjectMapper to ignore unknown properties for robustness
             objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
             return objectMapper.readValue(
                     res,
                     new TypeReference<List<JobStatus>>() {}
             );
-
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

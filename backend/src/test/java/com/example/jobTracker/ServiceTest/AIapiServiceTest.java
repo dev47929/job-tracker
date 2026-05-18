@@ -38,6 +38,6 @@ public class AIapiServiceTest {
 
     @Test
     public void AiTest(){
-        aIapiService.getGroqApiResponse(testContext);
+        aIapiService.getOpenRouterResponse(testContext);
     };
 }
