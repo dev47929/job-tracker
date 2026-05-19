@@ -162,6 +162,7 @@ public class AIapiService {
                 || responseBody.getChoices().isEmpty()) {
             return List.of();
         }
+            System.out.println("Successfully retrieved AI API response");
         try {
             String res = responseBody.getChoices()
                     .get(0)

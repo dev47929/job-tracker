@@ -19,7 +19,8 @@ const Table = () => {
         },
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : [];
       if (Array.isArray(data)) {
         setUserJobs(data);
       }
