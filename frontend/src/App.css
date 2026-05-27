@@ -1,2 +1,33 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+:root {
+  color-scheme: light;
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background-color: rgba(79, 70, 229, 0.2);
+  color: #1e293b;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
