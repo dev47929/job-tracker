@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { FiLoader } from "react-icons/fi";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:8080";
 
 const ReviewParsedJobs = ({
   parsedJobs,
@@ -9,6 +12,44 @@ const ReviewParsedJobs = ({
   onClose,
   loading,
 }) => {
+  const [addStatuses, setAddStatuses] = useState({});
+
+  async function addSingleJob(index) {
+    const job = parsedJobs[index];
+    if (!job) return;
+    setAddStatuses((prev) => ({ ...prev, [index]: "posting" }));
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${BASE_URL}/jobs/users/addjob`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          company: job.company || "",
+          status: job.status || "Applied",
+          appliedOn: job.appliedOn || "",
+          role: job.role || "",
+        }),
+      });
+
+      if (res.ok) {
+        await res.json();
+        setAddStatuses((prev) => ({ ...prev, [index]: "success" }));
+        // remove the job from parsed list after successful add
+        handleRemoveJob(index);
+      } else {
+        const text = await res.text();
+        console.error("Add failed", res.status, text);
+        setAddStatuses((prev) => ({ ...prev, [index]: "error" }));
+      }
+    } catch (e) {
+      console.error("Add error", e);
+      setAddStatuses((prev) => ({ ...prev, [index]: "error" }));
+    }
+  }
+
   return (
     <div>
       <p className="text-gray-400 mb-4 font-medium text-sm">
@@ -92,12 +133,22 @@ const ReviewParsedJobs = ({
                 rows="2"
               />
             </div>
-            <button
-              onClick={() => handleRemoveJob(index)}
-              className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 rounded-lg text-xs font-semibold transition cursor-pointer"
-            >
-              Remove Application
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => addSingleJob(index)}
+                disabled={addStatuses[index] === "posting"}
+                className="px-3 py-1.5 bg-green-500/10 hover:bg-green-500 hover:text-white text-green-400 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-2"
+              >
+                {addStatuses[index] === "posting" && <FiLoader className="animate-spin" />}
+                {addStatuses[index] === "success" ? "Added" : addStatuses[index] === "error" ? "Retry" : "Add Application"}
+              </button>
+              <button
+                onClick={() => handleRemoveJob(index)}
+                className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 rounded-lg text-xs font-semibold transition cursor-pointer"
+              >
+                Remove Application
+              </button>
+            </div>
           </div>
         ))}
       </div>

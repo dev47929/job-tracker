@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JobStatusRepo extends JpaRepository<JobStatus, Long> {
 
+    void getByJobId(Long jobId);
 }

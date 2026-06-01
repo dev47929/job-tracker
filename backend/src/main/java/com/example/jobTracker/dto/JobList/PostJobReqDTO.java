@@ -7,6 +7,6 @@ import java.time.LocalDate;
 public class PostJobReqDTO {
     private String company;
     private String status;
-    private LocalDate appliedOn;
+    private String appliedOn;
     private String role;
 }

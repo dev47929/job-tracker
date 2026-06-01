@@ -14,25 +14,29 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(
-        name = "webuser"
-)
-public class User implements UserDetails{
+@Table(name = "users")
+public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(unique = true)
     private String username;
+
     @Column(unique = true)
     private String email;
 
     private String password;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany( cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id" , nullable = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<JobStatus> jobStatuses;
 

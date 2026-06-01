@@ -6,11 +6,14 @@ import com.example.jobTracker.dto.AiReqDto;
 import com.example.jobTracker.dto.AiResDTO;
 import com.example.jobTracker.dto.JobList.*;
 import com.example.jobTracker.dto.User.UserResponseDTO;
+import com.example.jobTracker.dto.patch.PatchJobsDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -35,6 +38,11 @@ public class UserDashboardController {
     @PostMapping("/users/addjob")
     public ResponseEntity<PostJobResponseDTO> postJob(@RequestBody PostJobReqDTO postJobReqDTO , HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(dashboardService.addJob(postJobReqDTO , httpServletRequest));
+    }
+
+    @PatchMapping
+    public ResponseEntity<String> updateJobs(@RequestBody PatchJobsDTO patchJobsDTO , HttpServletRequest httpServletRequest){
+        return ResponseEntity.ok(dashboardService.patchJobs(patchJobsDTO, httpServletRequest));
     }
 
     @DeleteMapping("/users/{jobId}")

@@ -13,6 +13,7 @@ import AuthLayout from "./pages/Auth/AuthLayout.jsx";
 import DashboardLayout from "./pages/Dashboard/DashboardLayout.jsx";
 import Profile from "./pages/Dashboard/Profile.jsx";
 import Applications from "./pages/Dashboard/Applications.jsx";
+import MatchJobs from "./pages/MatchJobs.jsx";
 
 const Routes = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const Routes = createBrowserRouter([
     children: [
       { path: "profile", element: <Profile /> },
       { path: "applications", element: <Applications /> },
+      { path: "match-jobs", element: <MatchJobs /> },
     ],
   },
 ]);

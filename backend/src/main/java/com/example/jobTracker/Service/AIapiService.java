@@ -2,8 +2,10 @@ package com.example.jobTracker.Service;
 
 import com.example.jobTracker.Entity.JobStatus;
 import com.example.jobTracker.dto.AIdtos.ContextResDTO;
+import com.example.jobTracker.dto.AIdtos.matchJobs.MatchJobsResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -30,34 +33,76 @@ public class AIapiService {
     private final WebClient.Builder webClientBuilder;
     private final String url = "https://openrouter.ai/api/v1/chat/completions";
     private final String base_url ="https://api.groq.com/openai/v1";
-    private final String groqUrl = "https://api.groq.com/openai/v1";
-    private final String systemPrompt =  "\nConvert the above data into STRICT VALID JSON ARRAY format.\n" +
-            "Example:\n" +
-            "[\n" +
-            "  {\n" +
-            "    \"company\": \"Google\",\n" +
-            "    \"status\": \"Under Review\",\n" +
-            "    \"appliedOn\": \"2026-05-02\",\n" +
-            "    \"role\": \"Software Engineer Intern\"\n" +
-            "  }\n" +
-            "]\n" +
-            "Rules:\n" +
-            "- Return ONLY JSON\n" +
-            "- No explanation\n" +
-            "- Use N/A if field missing";
+    private final String groqUrl = "https://api.groq.com/openai/v1/chat/completions";
+    private final String matchJobsSystemPrompt = """
+            You are a JSON API.
 
+Return ONLY valid JSON.
+
+Do not explain anything.
+Do not use markdown.
+Do not wrap in ```json.
+
+You are an expert technical recruiter and ATS evaluator.
+
+Your task is to compare a candidate's resume against a job description and evaluate how well they match.
+
+Analyze:
+1. Skills match
+2. Experience match
+3. Education match
+4. Relevant projects
+5. Missing requirements
+6. Strengths
+7. Weaknesses
+
+Rules:
+- Base your analysis only on information present in the resume and job description.
+- Do not invent qualifications, experience, or skills.
+- If information is missing, state that it is not mentioned.
+- Be objective and concise.
+- Provide a match score from 0 to 100.
+- Explain the score.
+
+Return ONLY valid JSON in the following format:
+
+{
+  "matchPercentage": 0,
+  "summary": "",
+  "strengths": [],
+  "missingSkills": [],
+  "missingRequirements": [],
+  "relevantSkills": [],
+  "relevantProjects": [],
+  "recommendations": []
+}
+            """;
+    private final String systemPrompt = """  
+You are a JSON API.
+
+Return ONLY valid JSON.
+
+Do not explain anything.
+Do not use markdown.
+Do not wrap in ```json.
+
+Return a JSON array of JobStatus objects.
+
+Example:
+[
+  {
+    "company": "Google",
+    "status": "APPLIED",
+    "appliedOn": "2026-05-29",
+    "role": "Software Engineer"
+  }
+]
+""";
 
     public List<JobStatus> getOpenRouterResponse(String context){
         String actualUrl = url;
         String model = "deepseek/deepseek-v4-flash:free";
         String authHeaderValue = "Bearer " + apiKeyOrBearer;
-
-        // If the API_KEY starts with "sk-proj-", it is an OpenAI API Key.
-        // If they called getOpenRouterResponse, but are using an OpenAI key, we should route it to OpenAI API instead.
-        if (apiKeyOrBearer != null && (apiKeyOrBearer.startsWith("sk-proj-") || (apiKeyOrBearer.startsWith("sk-") && !apiKeyOrBearer.startsWith("sk-or-")))) {
-            actualUrl = "https://openrouter.ai/api/v1/chat/completions";
-            model = "openrouter/free";
-        }
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", authHeaderValue);
@@ -143,7 +188,7 @@ public class AIapiService {
         message.put("content", systemPrompt + context);
 
         HashMap<String, Object> body = new HashMap<>();
-        body.put("model", "llama-3.3-70b-versatile");
+        body.put("model", "llama-3.1-8b-instant");
         body.put("messages", List.of(message));
 
         HttpEntity<HashMap<String, Object>> entity =
@@ -180,5 +225,52 @@ public class AIapiService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    public MatchJobsResponseDto matchJob(String context) {
+        HttpEntity<Map<String, Object>> entity = buildRequest(matchJobsSystemPrompt + context);
+
+        try {
+            ResponseEntity<ContextResDTO> response = restTemplate.exchange(
+                    groqUrl, HttpMethod.POST, entity, ContextResDTO.class);
+
+            String content = extractContent(response.getBody());
+            return parseJson(content, MatchJobsResponseDto.class);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Groq matchJob request failed", e);
+        }
+    }
+
+
+    private HttpEntity<Map<String, Object>> buildRequest(String prompt) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(groqApiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> body = Map.of(
+                "model", "llama-3.1-8b-instant",
+                "messages", List.of(Map.of("role", "user", "content", prompt))
+        );
+
+        return new HttpEntity<>(body, headers);
+    }
+
+    private String extractContent(ContextResDTO responseBody) {
+        if (responseBody == null
+                || responseBody.getChoices() == null
+                || responseBody.getChoices().isEmpty()) {
+            return "{}";
+        }
+
+        return responseBody.getChoices()
+                .get(0)
+                .getMessage()
+                .getContent();
+    }
+
+    private <T> T parseJson(String raw, Class<T> type) throws JsonProcessingException {
+        String cleaned = raw.replace("```json", "").replace("```", "").trim();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        return objectMapper.readValue(cleaned, type);
     }
 }

@@ -1,4 +1,4 @@
-import { FiHome, FiUser, FiBriefcase, FiSettings } from "react-icons/fi";
+import { FiHome, FiUser, FiBriefcase, FiSettings, FiTarget } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
@@ -27,6 +27,15 @@ const Sidebar = () => {
             >
               <FiUser size={20} />
               <span>Profile</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={"/user/dashboard/match-jobs"}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-slate-700 transition"
+            >
+              <FiTarget size={20} />
+              <span>Match Jobs</span>
             </Link>
           </li>
         </ul>
