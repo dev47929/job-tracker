@@ -32,6 +32,7 @@ const Navbar = () => {
             className="rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-700"
           >
             Create account
+            your details will be hidden
           </Link>
         </div>
       </div>
